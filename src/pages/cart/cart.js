@@ -13,6 +13,16 @@ const Cart = () => {
   const[address,setAddress]=useState([])
   const[addId,setAddressId]=useState(null)
   const[trigger,setTrigger]=useState(true)
+  const[city,setCity]=useState('')
+  const[country,setCountry]=useState('')
+  const[line,setLine]=useState('')
+  const[pin,setPin]=useState('')
+  const[state,setState]=useState('')
+
+
+
+
+
   const removeCart=(id)=>{
     
     fetch(`http://localhost:8081/api/carts/inactive/${id}`,{
@@ -132,8 +142,108 @@ const Cart = () => {
       setTrigger(!trigger)
     })
   }
+  const [isOpenCon,setIsOpenCon]=useState(false)
+  const handleAddAddress=()=>{
+    setIsOpenCon(true)
+  }
+  const handleSaveAddress = (e) => {
+    e.preventDefault();
+    const item = {
+      userId:sessionStorage.getItem("userId"),
+	addressLine:line,
+	addressCity:city,
+	addressState:state,
+	addressCountry:country,
+	addressPinCode:pin
+      
+    };
+    console.log(JSON.stringify(item));
+    fetch(`http://localhost:8081/api/address/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error("cannot add address ");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setIsOpenCon(false)
+      });
+  };
   return (
+    
     <div className="cartWrapper">
+      {isOpenCon && (
+      <div className="popupContainer" onClick={() => setIsOpenCon(false)}>
+        <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+          <div className="popupHeader">
+            <h2>Add Address</h2>
+          </div>
+          <form className="login-cont" onSubmit={handleSaveAddress}>
+        <label style={{color:'white'}} for="name">line:</label>
+        <br />
+        <input
+        style={{backgroundColor:'white'}}
+          type="text"
+          id="name"
+          value={line}
+          onChange={(e) => setLine(e.target.value)}
+        />
+        <br />
+        <label style={{color:'white'}} for="email">City:</label>
+        <br />
+        <input
+        style={{backgroundColor:'white'}}
+          type="text"
+          id="email"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <br />
+        <label style={{color:'white'}} for="password">State:</label>
+        <br />
+        <input
+        style={{backgroundColor:'white'}}
+          type="text"
+          id="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+        />
+        <br />
+        <label style={{color:'white'}} for="password">Pin:</label>
+        <br />
+        <input
+        style={{backgroundColor:'white'}}
+          type="text"
+          id="text"
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
+        />
+        <br />
+        <label style={{color:'white'}} for="password">Country:</label>
+        <br />
+        <input
+        style={{backgroundColor:'white'}}
+          type="text"
+          id="text"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        />
+        <br />
+        <button type="submit" className="btn btn-primary">
+          Add Address
+        </button>
+      </form>
+          
+        </div>
+      </div>
+    )}
       <div className="container">
         {cartData.length >= 1 ? (
           <div className="grid my-5">
@@ -205,6 +315,7 @@ const Cart = () => {
                   </span>
                 </div>
               </div>
+              <span className="price" onClick={handleAddAddress} style={{cursor:'pointer'}}>Add Address <span>+</span></span>
               <div className=" flex py-1">
                   <span style={{width:'100%'}}>Select address</span>
                   <span className="price">

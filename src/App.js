@@ -1,11 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-  createSearchParams,
-} from "react-router-dom";
-
+import { Routes, Route, useNavigate, createSearchParams } from "react-router-dom";
 import { NavBar } from "./components/navbar";
 import { Products } from "./pages/products";
 import { Product } from "./pages/product";
@@ -15,6 +8,7 @@ import { useCart } from "./context/cart";
 import { Payment } from "./pages/payment";
 import { Login } from "./pages/login";
 import { Signup } from "./pages/signup";
+import AuthRoutes from "./AuthRoutes";
 
 function App() {
   const navigate = useNavigate();
@@ -27,24 +21,18 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route  element={<>
+          <NavBar onSearch={onSearch} cartItemCount={cartItemCount()} />
+          <AuthRoutes /></>} >
+        <Route path="/" element={<Products />} />
+        <Route path="/product/:productId" element={<Product />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="*" element={<NotFound />} />
-        <Route
-          element={
-            <>
-              <NavBar onSearch={onSearch} cartItemCount={cartItemCount()} />
-            </>
-          }
-        >
-          <Route path="/products" element={<Products />} />
-          <Route path="/product/:productId" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/payment" element={<Payment />} />
-          {/* <Route element={<RoleRoutes />}>
-            <Route path="/dealer" element={<Dealer />} />
-          </Route> */}
         </Route>
+        <Route path="/login" element={<Login/>} />
+
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   );

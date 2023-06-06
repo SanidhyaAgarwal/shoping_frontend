@@ -9,6 +9,7 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [query] = useSearchParams();
     const { addToCart } = useCart()
+    
 
     const searchQuery = query.get('q');
 
