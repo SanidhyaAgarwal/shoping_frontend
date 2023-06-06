@@ -11,7 +11,7 @@ const Cart = () => {
     useCart();
   const[cartData,setCartData]=useState([])
   const[address,setAddress]=useState([])
-  const[addressId,setAddressId]=useState(null)
+  const[addId,setAddressId]=useState(null)
   const[trigger,setTrigger]=useState(true)
   const removeCart=(id)=>{
     
@@ -38,6 +38,7 @@ const Cart = () => {
       listOfId.push(items.cartId);
       total+=(items.product.price*items.quantity)
     })
+    // setCartIds(listOfId);
     return total;
   }
 
@@ -54,6 +55,11 @@ const Cart = () => {
       return res.json()
     }).then((data)=>{
       setCartData(data)
+      var Cid=[];
+      data.map(cart=>{
+        Cid.push(cart.cartId)
+      })
+      setCartIds(Cid)
     })
     
   }, [trigger]);
@@ -101,6 +107,28 @@ const Cart = () => {
       }
       return res.json()
     }).then((data)=>{
+      setTrigger(!trigger)
+    })
+  }
+  const handleCheckout=()=>{
+    
+    console.log(cartIds)
+    let addressIdInt = parseInt(addId);
+    const data={userId:1,addressId:addressIdInt,cartId:cartIds}
+    console.log(JSON.stringify(data))
+    fetch(`http://localhost:8081/api/orders/`,{
+      method:"POST",headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(data)
+    })
+    .then((res)=>{
+      if(!res.ok){
+        throw Error("not found")
+      }
+      return res.json()
+    }).then((data)=>{
+      console.log(data)
       setTrigger(!trigger)
     })
   }
@@ -178,26 +206,27 @@ const Cart = () => {
                 </div>
               </div>
               <div className=" flex py-1">
-                  <span>Select address</span>
+                  <span style={{width:'100%'}}>Select address</span>
                   <span className="price">
-                  <select >
+                  <select className="address-select" onChange={(e)=>setAddressId(e.target.value)} >
+                  <option disabled>select address</option>
                     {address && address.map((add)=>
-                    <option>{add.address}</option>)
+                    
+                    <option value={add.id}>{add.addressLine}-{add.addressCity}-{add.addressState}-{add.addressPinCode}-{add.addressCountry}</option>)
                     }
-                <option>hi</option>
-                <option>hi</option>
-                <option>hi</option>
+                
               </select>
                   </span>
                 </div>
               
         
-              <Link
+              {/* <Link
                 to={"/payment"}
                 className="titleLink"
-              >
-                <button>checkout</button>
-              </Link>
+              > */}
+              <button className="remove my-1" style={{width:'50%',border:'none'}} onClick={handleCheckout}>checkout</button>
+                
+              {/* </Link> */}
             </div>
           </div>
         ) : (

@@ -507,3 +507,8 @@ img {
     grid-template-columns: 1fr;
   }
 }
+.address-select{
+  padding: 5px;
+  width: 100%;
+  border: 1px solid red;
+}

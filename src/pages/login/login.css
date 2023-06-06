@@ -1,0 +1,31 @@
+.login-container{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: 20px;
+    background-color: rgba(0, 0, 0, 0.358);
+    height: 350px;
+    border-radius: 10px;
+}
+.login-cont{
+    width: 100%;
+    margin-top: 50px;
+    margin: 10px;
+}
+.login-cont input{
+    height: 40px;
+    width: 50%;
+    background-color: rgb(155, 215, 241);
+    border-radius: 2px;
+    border: none;
+}
+.login-cont button{
+    width: 20%;
+    height: 30px;
+    margin-top: 10px;
+    background-color: aliceblue;
+    border: none;
+}
+.login-cont button:hover{
+    background-color: rgb(222, 252, 252);
+}
