@@ -41,6 +41,9 @@ function App() {
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/payment" element={<Payment />} />
+          {/* <Route element={<RoleRoutes />}>
+            <Route path="/dealer" element={<Dealer />} />
+          </Route> */}
         </Route>
       </Routes>
     </>
